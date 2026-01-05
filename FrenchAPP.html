@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语核心词汇 (精选300词)</title>
+    <style>
+        /* 定义配色变量 */
+        :root {
+            --primary: #4834d4;
+            --secondary: #686de0;
+            --bg: #f1f2f6;
+            --card-bg: #ffffff;
+            --card-back-bg: #fcfeff;
+            --text: #2c3e50;
+            --text-light: #95a5a6;
+            --hint-text: #bdc3c7;
+            --success: #6ab04c;
+            --btn-reveal-bg: #ffffff;
+            --btn-reveal-text: #4834d4;
+            --btn-reveal-border: #e1e1e1;
+            --shadow-color: rgba(50, 50, 93, 0.1);
+            --track-bg: #dfe4ea;
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --primary: #8c7ae6;
+            --secondary: #a29bfe;
+            --bg: #1e272e;
+            --card-bg: #2d3436;
+            --card-back-bg: #353b48;
+            --text: #dcdde1;
+            --text-light: #b2bec3;
+            --hint-text: #636e72;
+            --success: #badc58;
+            --btn-reveal-bg: #2d3436;
+            --btn-reveal-text: #a29bfe;
+            --btn-reveal-border: #4b6584;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --track-bg: #4b4b4b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary);
+            flex-grow: 1;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            margin-left: 10px;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background-color: var(--shadow-color);
+        }
+
+        .progress-track {
+            flex-grow: 1;
+            height: 10px;
+            background: var(--track-bg);
+            margin: 0 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .card-wrapper {
+            perspective: 1000px;
+            height: 400px;
+            width: 100%;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px var(--shadow-color);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: var(--card-bg);
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .card-front {
+            z-index: 2;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: var(--card-back-bg);
+            border: 2px solid var(--secondary);
+        }
+
+        .word-fr {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .word-cn {
+            font-size: 2rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .word-meta {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: var(--hint-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-reveal {
+            background: var(--btn-reveal-bg);
+            color: var(--btn-reveal-text);
+            border: 2px solid var(--btn-reveal-border);
+        }
+
+        .btn-reveal:hover {
+            border-color: var(--primary);
+            filter: brightness(0.95);
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(72, 52, 212, 0.3);
+        }
+
+        .completed-view {
+            display: none;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        @media (max-width: 480px) {
+            .word-fr { font-size: 2.2rem; }
+            .card-wrapper { height: 350px; }
+            .theme-toggle { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header-row">
+        <div class="status-bar">
+            <span id="counter">1 / 300</span>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <span>FR-CN</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="切换黑夜/日间模式">🌙</button>
+    </div>
+
+    <div class="card-wrapper" id="cardContainer" onclick="flipCard()">
+        <div class="card" id="card">
+            <div class="card-face card-front">
+                <div class="word-fr" id="frText">Chargement...</div>
+                <div class="word-meta" id="frMeta"></div>
+                <div class="hint">点击查看含义</div>
+            </div>
+            <div class="card-face card-back">
+                <div class="word-fr" style="font-size: 1.8rem; opacity: 0.5; margin-bottom: 30px;" id="frTextBack"></div>
+                <div class="word-cn" id="cnText"></div>
+                <div class="word-meta" id="cnMeta"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="completed-view" id="completedView">
+        <h2 style="color: var(--success); margin-bottom: 20px;">太棒了！🎉</h2>
+        <p style="margin-bottom: 30px; font-size: 1.2rem;">你已经完成了本轮所有核心词汇。</p>
+        <button class="btn btn-next" onclick="restart()">重新洗牌并开始</button>
+    </div>
+
+    <div class="controls" id="controls">
+        <button class="btn btn-reveal" onclick="flipCard()">翻转 (Space)</button>
+        <button class="btn btn-next" onclick="nextCard()">下一个 (→)</button>
+    </div>
+</div>
+
+<script>
+    // ------------------------------------------------------------------------
+    // 精简后的数据源 (~300个高频核心词)
+    // ------------------------------------------------------------------------
+    const rawData = `
+le printemps|春天
+Paris|巴黎
+Pékin (Beijing)|北京
+la Chine|中国
+la France|法国
+l’Espagne f.|西班牙
+l’Allemagne f.|德国
+le Japon|日本
+les États-Unis m.|美国
+Chinois,e|中国人
+chinois,e|中式的/中国的
+le chinois|中文
+Français,e|法国人
+français,e|法式的/法国的
+le français|法语
+Anglais,e|英国人
+anglais,e|英国的
+l'anglais m.|英语
+médecin|医生
+journaliste|记者
+secrétaire|秘书
+professeur,e|老师/教授
+étudiant,e|学生
+chanteur,se|歌手
+acteur,trice|演员
+vendeur,se|售货员
+Monsieur (M.)|先生
+Madame (Mme)|女士/夫人
+Mademoiselle (Mlle)|小姐
+le nom|姓氏/名字
+le prénom|名字
+s'appeler|名叫...
+s’il vous plaît|请 (您)
+pardon|对不起
+merci|谢谢
+bonjour|你好
+au revoir|再见
+saluer|致意/问候
+excuser|原谅
+d'accord|同意/好的
+pas du tout|一点也不
+bien sûr|当然
+un homme|男人
+une femme|女人
+un garçon|男孩
+une fille|女孩/女儿
+un enfant|孩子
+un ami,e|朋友
+une personne|一个人
+les gens|人们
+une adresse|地址
+une rue|街道
+une place|广场
+une ville|城市
+habiter|居住
+un appartement|公寓
+une maison|房子
+un hôtel|旅馆
+un restaurant|餐厅
+un magasin|商店
+une école|学校
+un bureau|办公室/书桌
+une chambre|卧室
+une cuisine|厨房
+une salle de bains|浴室
+les toilettes f.|洗手间
+une porte|门
+une fenêtre|窗户
+un lit|床
+une table|桌子
+une chaise|椅子
+un livre|书
+un stylo|钢笔
+un cadeau|礼物
+une voiture|汽车
+un avion|飞机
+un vélo|自行车
+le métro|地铁
+le bus|公交车
+le train|火车
+un billet|票/钞票
+un aéroport|机场
+voyager|旅行
+partir|出发/离开
+arriver|到达
+aller|去
+venir|来
+entrer|进入
+sortir|出去
+monter|上去
+descendre|下来
+rester|停留
+le temps|时间/天气
+une heure|一小时/点
+une minute|一分钟
+maintenant|现在
+aujourd'hui|今天
+demain|明天
+hier|昨天
+le matin|早上
+le midi|中午
+l'après-midi m.|下午
+le soir|晚上
+la nuit|夜晚
+tôt|早
+tard|晚
+bientôt|马上/不久
+toujours|总是
+jamais|从不
+le lundi|星期一
+le mardi|星期二
+le mercredi|星期三
+le jeudi|星期四
+le vendredi|星期五
+le samedi|星期六
+le dimanche|星期日
+janvier|一月
+février|二月
+mars|三月
+avril|四月
+mai|五月
+juin|六月
+juillet|七月
+août|八月
+septembre|九月
+octobre|十月
+novembre|十一月
+décembre|十二月
+le week-end|周末
+les vacances f.|假期
+une semaine|一周
+un mois|一个月
+une année|一年
+un, une|一
+deux|二
+trois|三
+quatre|四
+cinq|五
+six|六
+sept|七
+huit|八
+neuf|九
+dix|十
+vingt|二十
+cinquante|五十
+cent|一百
+mille|一千
+premier,ère|第一
+dernier,ère|最后的
+être|是
+avoir|有
+faire|做
+dire|说
+parler|说/讲
+écouter|听
+entendre|听见
+voir|看见
+regarder|看
+lire|读
+écrire|写
+manger|吃
+boire|喝
+aimer|爱/喜欢
+adorer|热爱
+détester|讨厌
+vouloir|想要
+pouvoir|能够
+savoir|知道
+connaître|认识/了解
+comprendre|理解
+apprendre|学习
+travailler|工作
+acheter|买
+vendre|卖
+payer|支付
+chercher|寻找
+trouver|发现
+perdre|丢失
+donner|给
+prendre|拿/吃/喝/乘
+commencer|开始
+finir|结束
+le pain|面包
+l'eau f.|水
+le café|咖啡
+le thé|茶
+le lait|牛奶
+le vin|葡萄酒
+la bière|啤酒
+le jus de fruit|果汁
+le riz|米饭
+les pâtes f.|面食
+la viande|肉
+le poisson|鱼
+le poulet|鸡肉
+le bœuf|牛肉
+un œuf|鸡蛋
+le fromage|奶酪
+les légumes m.|蔬菜
+la salade|沙拉
+les fruits m.|水果
+une pomme|苹果
+une banane|香蕉
+une orange|橙子
+le sucre|糖
+le sel|盐
+le petit-déjeuner|早餐
+le déjeuner|午餐
+le dîner|晚餐
+avoir faim|饿
+avoir soif|渴
+grand,e|大的/高的
+petit,e|小的/矮的
+bon,ne|好的
+mauvais,e|坏的
+beau,belle|美丽的
+joli,e|漂亮的
+nouveau,nouvelle|新的
+vieux,vieille|老的
+jeune|年轻的
+chaud,e|热的
+froid,e|冷的
+cher,ère|贵的
+bon marché|便宜的
+facile|容易的
+difficile|困难的
+rapide|快的
+lent,e|慢的
+propre|干净的
+sale|脏的
+content,e|高兴的
+triste|伤心的
+fatigué,e|累的
+malade|生病的
+libre|自由的/空闲的
+occupé,e|忙碌的
+ouvert,e|开着的
+fermé,e|关着的
+le corps|身体
+la tête|头
+la main|手
+le pied|脚
+les yeux m.|眼睛
+les cheveux m.|头发
+le cœur|心脏/心
+les vêtements m.|衣服
+un pantalon|裤子
+une chemise|衬衫
+une robe|连衣裙
+un manteau|大衣
+une chaussure|鞋子
+un sac|包
+rouge|红色的
+bleu,e|蓝色的
+vert,e|绿色的
+jaune|黄色的
+noir,e|黑色的
+blanc,he|白色的
+gris,e|灰色的
+la nature|大自然
+le soleil|太阳
+la lune|月亮
+le ciel|天空
+la mer|大海
+la montagne|山
+un arbre|树
+une fleur|花
+un chien|狗
+un chat|猫
+un oiseau|鸟
+la pluie|雨
+il fait beau|天气好
+il fait froid|天气冷
+il fait chaud|天气热
+ici|这里
+là-bas|那里
+où|哪里
+quand|什么时候
+comment|如何
+pourquoi|为什么
+qui|谁
+quoi|什么
+combien|多少
+avec|和...一起
+sans|没有
+pour|为了
+dans|在...里面
+sur|在...上面
+sous|在...下面
+devant|在...前面
+derrière|在...后面
+près de|靠近
+loin de|远离
+gauche|左
+droite|右`;
+
+    let vocabulary = rawData.trim().split('\n').map(line => {
+        const [fr, cn] = line.split('|');
+        let meta = "词汇";
+        if (fr.includes('(m.)') || fr.includes(' le ') || fr.includes('un ')) meta = "阳性 (Masculin)";
+        else if (fr.includes('(f.)') || fr.includes(' la ') || fr.includes('une ')) meta = "阴性 (Féminin)";
+        else if (fr.endsWith('er') || fr.endsWith('ir') || fr.endsWith('re')) meta = "动词或其他";
+        return { fr, cn, meta };
+    });
+
+    let queue = [];
+    let currentIndex = 0;
+    let isAnimating = false; // 动画锁
+
+    const cardEl = document.getElementById('card');
+    const containerEl = document.getElementById('cardContainer');
+    const completedEl = document.getElementById('completedView');
+    const controlsEl = document.getElementById('controls');
+
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function init() {
+        queue = shuffle([...vocabulary]);
+        currentIndex = 0;
+        isAnimating = false;
+        
+        cardEl.classList.remove('flipped');
+        cardEl.style.transform = '';
+        cardEl.style.transition = '';
+
+        containerEl.style.display = 'block';
+        controlsEl.style.display = 'flex';
+        completedEl.style.display = 'none';
+        updateCard();
+        updateProgress();
+    }
+
+    function updateCard() {
+        if (currentIndex >= queue.length) {
+            showCompleted();
+            return;
+        }
+
+        const item = queue[currentIndex];
+        document.getElementById('frText').textContent = item.fr;
+        document.getElementById('frTextBack').textContent = item.fr;
+        document.getElementById('frMeta').textContent = item.meta;
+        document.getElementById('cnText').textContent = item.cn;
+        document.getElementById('cnMeta').textContent = item.meta;
+    }
+
+    function updateProgress() {
+        const current = currentIndex + 1;
+        const total = queue.length;
+        document.getElementById('counter').innerText = `${Math.min(current, total)} / ${total}`;
+        const percent = (currentIndex / total) * 100;
+        document.getElementById('progressBar').style.width = `${percent}%`;
+    }
+
+    function flipCard() {
+        if (isAnimating || currentIndex >= queue.length) return;
+        cardEl.classList.toggle('flipped');
+    }
+
+    function nextCard() {
+        if (isAnimating || currentIndex >= queue.length) return;
+        isAnimating = true;
+
+        if (cardEl.classList.contains('flipped')) {
+            cardEl.classList.remove('flipped');
+            setTimeout(() => {
+                performSlide();
+            }, 300);
+        } else {
+            performSlide();
+        }
+    }
+
+    function performSlide() {
+        // 第一阶段：滑出
+        cardEl.style.transform = "translateX(-120%) rotateY(0deg)";
+        
+        setTimeout(() => {
+            // 第二阶段：复位（无动画）
+            cardEl.style.transition = "none";
+            cardEl.style.transform = "translateX(120%)";
+            
+            currentIndex++;
+            updateCard();
+            updateProgress();
+            
+            void cardEl.offsetWidth; // 强制重绘
+
+            setTimeout(() => {
+                // 第三阶段：滑入
+                cardEl.style.transition = "transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1)";
+                cardEl.style.transform = "translateX(0)";
+
+                // 第四阶段：清理
+                setTimeout(() => {
+                    cardEl.style.transform = ""; 
+                    cardEl.style.transition = ""; 
+                    isAnimating = false;
+                }, 600);
+
+            }, 50);
+        }, 300);
+    }
+
+    function showCompleted() {
+        containerEl.style.display = 'none';
+        controlsEl.style.display = 'none';
+        completedEl.style.display = 'block';
+        document.getElementById('progressBar').style.width = `100%`;
+        document.getElementById('counter').innerText = `${queue.length} / ${queue.length}`;
+    }
+
+    function restart() {
+        init();
+    }
+
+    // 黑夜模式
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+    const currentTheme = localStorage.getItem('theme');
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    if (currentTheme === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        themeToggleBtn.textContent = '☀️';
+    } else if (currentTheme === 'light') {
+        body.removeAttribute('data-theme');
+        themeToggleBtn.textContent = '🌙';
+    } else if (prefersDarkScheme.matches) {
+        body.setAttribute('data-theme', 'dark');
+        themeToggleBtn.textContent = '☀️';
+    } else {
+        themeToggleBtn.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            themeToggleBtn.textContent = '🌙';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            themeToggleBtn.textContent = '☀️';
+        }
+    });
+
+    // 键盘支持
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            flipCard();
+        } else if (e.code === 'ArrowRight') {
+            nextCard();
+        }
+    });
+
+    init();
+
+</script>
+
+</body>
+</html>
